@@ -13,14 +13,25 @@ class BaseModel:
     This class defines al common attributes/methods for
     other classes.
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Instantiate the objects with necessary
         attributes
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if (len(kwargs) != 0):
+            for i, v in kwargs.items():
+                if i == "__class__":
+                    continue
+                else:
+                    if (i == "created_at" or i == "updated_at"):
+                        setattr(self, i, datetime.fromisoformat(v))
+                    else:
+                        setattr(self, i, v)
+
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         """
