@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 Test file containing test cases of the base model
 """
@@ -50,3 +50,86 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(test_res['id'], str)
         self.assertIn('__class__', test_res)
         self.assertEqual(test_res['__class__'], "BaseModel")
+
+    def test_ignore_args(self):
+        """
+        Test that args supplied when creating a
+        new instance are ignored
+        """
+
+        base = BaseModel()
+        base_dict = base.to_dict()
+
+        new_base = BaseModel("hello", **base_dict)
+
+        self.assertEqual(base.created_at, new_base.created_at)
+        self.assertEqual(base.id, new_base.id)
+        self.assertEqual(base.created_at, new_base.created_at)
+
+    def test_create_from_dict(self):
+        """
+        Test that a new instance is successfully created from
+        a dictionary using kwargs
+        """
+
+        base = BaseModel()
+        base_dict = base.to_dict()
+
+        new_base = BaseModel(**base_dict)
+
+        self.assertEqual(base.created_at, new_base.created_at)
+        self.assertEqual(base.id, new_base.id)
+        self.assertEqual(base.created_at, new_base.created_at)
+        self.assertEqual(str(base), str(new_base))
+
+    def test_copy_all_dict_keys(self):
+        """
+        Test that all dictionary keys are
+        copied to the new object including extra keys
+        """
+
+        base = BaseModel()
+        base.name = "yam"
+        base.occupation = "developer"
+
+        base_dict = base.to_dict()
+
+        new_base = BaseModel(**base_dict)
+
+        self.assertEqual(base.created_at, new_base.created_at)
+        self.assertEqual(base.id, new_base.id)
+        self.assertEqual(new_base.name, "yam")
+        self.assertEqual(new_base.occupatiom, "developer")
+        self.assertEqual(base.created_at, new_base.created_at)
+
+    def test_class_not_copied(self):
+        """
+        Test that the __class__ attribute from
+        the dictionary was not copied
+        """
+
+        base = BaseModel()
+        base_dict = base.to_dict()
+        base_dict["__class__"] = "MyShittyClass"
+
+        new_base = BaseModel(**base_dict)
+        self.assertNotEqual(new_base.__class__, base_dict["__class__"])
+
+    def test_missing_keys(self):
+        """
+        Test that an error is thrown when accessing attributes that weren't
+        set when creating from dictionary
+        """
+
+        base = BaseModel()
+        base_dict = {"id": "sfhfgjgdffg"}
+
+        new_base = BaseModel(**base_dict)
+
+        with self.assertRaises(Exception):
+            val = new_base.created_at
+            val = new_base.updated_at
+
+
+if __name__ == "__main__":
+    unittest.main()

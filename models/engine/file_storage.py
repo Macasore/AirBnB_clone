@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """file_storage file
 this file contains the FileStorage class for
 serialization and deserialization
