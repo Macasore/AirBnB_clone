@@ -27,6 +27,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
+        print()
         pass
 
     def do_create(self, line):
