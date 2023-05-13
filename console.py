@@ -12,13 +12,7 @@ class HBNBCommand(cmd.Cmd):
     """
     This class creates the command interpreter
     """
-    prompt = '(hbnb) '
-
-    def do_quit(self, line):
-        """quits command to exit the console
-        """
-        print()
-        return True
+    prompt = "(hbnb) "
 
     def do_EOF(self, line):
         """quits the console
