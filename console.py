@@ -7,6 +7,7 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 
+
 class HBNBCommand(cmd.Cmd):
     """
     This class creates the command interpreter
@@ -39,30 +40,28 @@ class HBNBCommand(cmd.Cmd):
                 new_instance.save()
                 print(new_instance.id)
 
-    def do_show(self, line):
-        """prints the string representation of an instance based
-        on the class name and id
-        """
-        l = line.split()
-        if (not line):
-            print("** class name missing **")
-        else:
-            if (l[0] != "BaseModel"):
-                print("** class doesn't exist **")
-            else:
-                if ((len(l) == 2)):
-                    storage_dict = storage.all()
-                    for key in storage_dict:
-                        if key.endswith(l[1]):
-                            string = "yayy it works"
-                            break
-                        else:
-                            string = "** no instance found **"
-                    print(string)
-                else:
-                    print("** instance id missing **")
-
-
+    # def do_show(self, line):
+    #     """prints the string representation of an instance based
+    #     on the class name and id
+    #     """
+    #     l = line.split()
+    #     if (not line):
+    #         print("** class name missing **")
+    #     else:
+    #         if (l[0] != "BaseModel"):
+    #             print("** class doesn't exist **")
+    #         else:
+    #             if ((len(l) == 2)):
+    #                 storage_dict = storage.all()
+    #                 for key in storage_dict:
+    #                     if key.endswith(l[1]):
+    #                         string = "yayy it works"
+    #                         break
+    #                     else:
+    #                         string = "** no instance found **"
+    #                 print(string)
+    #             else:
+    #                 print("** instance id missing **")
 
 
 if __name__ == '__main__':
