@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Test file containing test cases of the base model
 """
@@ -99,7 +99,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(base.created_at, new_base.created_at)
         self.assertEqual(base.id, new_base.id)
         self.assertEqual(new_base.name, "yam")
-        self.assertEqual(new_base.occupatiom, "developer")
+        self.assertEqual(new_base.occupation, "developer")
         self.assertEqual(base.created_at, new_base.created_at)
 
     def test_class_not_copied(self):
