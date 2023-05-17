@@ -5,6 +5,7 @@ serialization and deserialization
 """
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -37,23 +38,27 @@ class FileStorage:
         """
         serializes the object file
         """
-        json_obj = {}
-        for key, value in FileStorage.__objects.items():
-            json_obj[key] = value.to_dict()
+        obj = FileStorage.__objects.copy()
+        for key, value in obj.items():
+            obj[key] = value.to_dict()
 
         with open(FileStorage.__file_path, "w", encoding="utf-8") as fp:
-            json.dump(json_obj, fp, indent=2)
+            json.dump(obj, fp, indent=2)
+            fp.close()
 
     def reload(self):
         """
         deserializes the json object
         """
+        from models import avail_classes
         try:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 json_object = json.load(f)
+                f.close()
 
                 for key, value in json_object.items():
-                    FileStorage.__objects[key] = BaseModel(**value)
+                    FileStorage.__objects[key] = avail_classes[
+                        value["__class__"]](**value)
 
         except Exception:
             pass

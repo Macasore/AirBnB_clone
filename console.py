@@ -6,6 +6,7 @@ This file contains the entry point of the command interpreter
 import cmd
 from models.base_model import BaseModel
 from models import storage, avail_classes
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -36,10 +37,10 @@ class HBNBCommand(cmd.Cmd):
         if (not line):
             print("** class name missing **")
         else:
-            if (line != "BaseModel"):
+            if (line not in avail_classes):
                 print("** class doesn't exist **")
             else:
-                new_instance = BaseModel()
+                new_instance = avail_classes[line]()
                 new_instance.save()
                 print(new_instance.id)
 
@@ -81,7 +82,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             for values in list.values():
-                str_list.append(str(values))
+                if values.__class__.__name__ == val[0]:
+                    str_list.append(str(values))
+                else:
+                    continue
             print(str_list)
 
     def do_update(self, line):
@@ -91,7 +95,7 @@ class HBNBCommand(cmd.Cmd):
         if value is None:
             return
         else:
-            split = line.split()
+            split = parse_args(line)
             # if (split[2] not in value.keys()):
             #     print("** attribute name missing **")
             if len(split) >= 4:
@@ -111,7 +115,7 @@ def find(line):
         print("** class name missing **")
         return None
     else:
-        if (attr[0] != "BaseModel"):
+        if (attr[0] not in avail_classes):
             print("** class doesn't exist **")
             return None
         else:
@@ -130,6 +134,14 @@ def get_obj(cls_name, id):
     key = "{}.{}".format(cls_name, id)
     storage_dict = storage.all()
     return (storage_dict.get(key))
+
+
+def parse_args(line):
+    """Parses the command line argument and
+    returns a tuple of all the arguments
+    """
+    args = re.findall(r'[^"\s]+|"[^"]+"', line)
+    return tuple([arg.replace('"', "") for arg in args])
 
 
 if __name__ == '__main__':
